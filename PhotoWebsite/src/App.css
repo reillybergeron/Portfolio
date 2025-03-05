@@ -1,0 +1,21 @@
+body,
+html {
+  font-family: "Courier", monospace;
+}
+
+body {
+  background-image: url("/Images/background.jpg"); /* Update with the correct path */
+  background-size: cover; /* Ensures the image covers the whole screen */
+  background-position: center; /* Centers the background */
+  background-repeat: no-repeat; /* Prevents tiling */
+  background-attachment: fixed; /* Keeps the image fixed when scrolling */
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}

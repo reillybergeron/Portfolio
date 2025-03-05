@@ -1,0 +1,20 @@
+.grayscale-tile {
+  filter: grayscale(100%);
+}
+/* Custom marker for the "X" */
+.custom-marker {
+  font-size: 30px;
+  color: red;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.75); /* Add this line for text shadow */
+}
+
+.selected-btn {
+  color: red !important;
+}

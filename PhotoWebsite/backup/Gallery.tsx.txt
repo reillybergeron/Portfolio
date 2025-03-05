@@ -1,0 +1,758 @@
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "leaflet/dist/leaflet.css"; // Import Leaflet styles
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from 'leaflet';
+import "./Gallery.css";
+import { photosOriginal, photosChronological } from "./FishPhotos";
+
+
+const Gallery: React.FC = () => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [layout, setLayout] = useState<"layout1" | "layout2">("layout1");
+  const [showFileList, setShowFileList] = useState(false);
+  const [selectedFileList, setSelectedFileList] = useState<string[]>([]);
+
+  const photos = layout === "layout1" ? photosOriginal : photosChronological; // For now, using the original list
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+
+      if (event.key === "ArrowRight") {
+        setSelectedIndex((prev) =>
+          prev !== null && prev < photos.length - 1 ? prev + 1 : prev
+        );
+      } else if (event.key === "ArrowLeft") {
+        setSelectedIndex((prev) =>
+          prev !== null && prev > 0 ? prev - 1 : prev
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedIndex, photos.length]);
+
+  const CustomMarker = ({
+    position,
+    markerId,
+    onClick,
+  }: {
+    position: [number, number];
+    markerId: string;
+    onClick: (markerId: string) => void;
+  }) => {
+    const icon = new L.DivIcon({
+      className: "custom-marker",
+      html: "X", // Display "X" inside the marker
+      iconSize: [30, 30],
+    });
+
+    return (
+      <Marker
+        position={position}
+        icon={icon}
+        eventHandlers={{ click: () => onClick(markerId) }} // Pass markerId on click
+      />
+    );
+  };
+  const handleMarkerClick = (markerId: string) => {
+    let matchedPhotos: string[] = [];
+
+    switch (markerId) {
+      case "1": //Parking Garage
+        matchedPhotos = [
+          "/Images/SNY00652.jpg",
+          "/Images/SNY00656.jpg",
+          "/Images/SNY00663.jpg",
+          "/Images/SNY00667.jpg",
+          "/Images/SNY00679.jpg",
+          "/Images/SNY00687.jpg",
+          "/Images/SNY00693.jpg",
+          "/Images/SNY00696.jpg",
+          "/Images/SNY00702.jpg",
+          "/Images/SNY00714.jpg",
+          "/Images/SNY00717.jpg",
+          "/Images/SNY01546.jpg",
+          "/Images/SNY01555.jpg",
+        ];
+        break;
+
+      case "2": //Center Ave Enterance to Aggie Village
+        matchedPhotos = [
+          "/Images/SNY00725.jpg",
+          "/Images/SNY00732.jpg",
+          "/Images/SNY00744.jpg",
+          "/Images/SNY00747.jpg",
+          "/Images/SNY00750.jpg",
+        ];
+        break;
+
+      case "3": //Aggie Village
+        matchedPhotos = [
+          "/Images/SNY00765.jpg",
+          "/Images/SNY00768.jpg",
+          "/Images/SNY01555.jpg",
+          "/Images/SNY01559.jpg",
+          "/Images/SNY01570.jpg",
+          "/Images/SNY01578.jpg",
+        ];
+        break;
+      case "4": //Lake St Exit from Aggie Village
+        matchedPhotos = ["/Images/SNY00768.jpg", "/Images/SNY00772.jpg"];
+        break;
+      case "5": //Gifford Building
+        matchedPhotos = ["/Images/SNY00774.jpg"];
+        break;
+      case "6": //Path Behind Art Building
+        matchedPhotos = ["/Images/SNY00779.jpg"];
+        break;
+      case "7": //Yates
+        matchedPhotos = ["/Images/SNY00790.jpg"];
+        break;
+      case "8": //Center Ave Statue
+        matchedPhotos = ["/Images/SNY00794.jpg", "/Images/SNY00797.jpg"];
+        break;
+      case "9": //School of Education
+        matchedPhotos = ["/Images/SNY00802.jpg", "/Images/SNY00808.jpg"];
+        break;
+      case "10": //Near Eddy and the Library
+        matchedPhotos = ["/Images/SNY00821.jpg"];
+        break;
+      case "11": //Clark
+        matchedPhotos = [
+          "/Images/SNY00833.jpg",
+          "/Images/SNY00841.jpg",
+          "/Images/SNY00851.jpg",
+        ];
+        break;
+      case "12": //Library Cube
+        matchedPhotos = ["/Images/SNY00855.jpg"];
+        break;
+      case "13": //Engineering 1
+        matchedPhotos = ["/Images/SNY00885.jpg"];
+        break;
+      case "14": //Engineering 2
+        matchedPhotos = ["/Images/SNY00888.jpg"];
+        break;
+      case "15": //Comp Sci
+        matchedPhotos = ["/Images/SNY00891.jpg"];
+        break;
+      case "16": //Prospect Plaza Parking Lot
+        matchedPhotos = [
+          "/Images/SNY00900.jpg",
+          "/Images/SNY00907.jpg",
+          "/Images/SNY01484.jpg",
+          "/Images/SNY01492.jpg",
+        ];
+        break;
+      case "17": //My Apartment
+        matchedPhotos = [
+          "/Images/SNY00912.jpg",
+          "/Images/SNY00918.jpg",
+          "/Images/SNY00923.jpg",
+          "/Images/SNY00928.jpg",
+          "/Images/SNY00939.jpg",
+          "/Images/SNY00952.jpg",
+          "/Images/SNY00999.jpg",
+          "/Images/SNY01005.jpg",
+          "/Images/SNY01261.jpg",
+          "/Images/SNY01269.jpg",
+          "/Images/SNY01461.jpg",
+          "/Images/SNY01508.jpg",
+          "/Images/SNY01538.jpg",
+          "/Images/LRM_20231122_162713.jpg",
+        ];
+        break;
+      case "18": //Laundromat
+        matchedPhotos = [
+          "/Images/SNY00955.jpg",
+          "/Images/SNY00959.jpg",
+          "/Images/SNY00961.jpg",
+          "/Images/SNY00972.jpg",
+          "/Images/SNY00977.jpg",
+        ];
+        break;
+      case "19": //Prospect Garbage
+        matchedPhotos = ["/Images/SNY00988.jpg", "/Images/SNY00991.jpg"];
+        break;
+      case "20": //Prospect and Whitcomb
+        matchedPhotos = [
+          "/Images/SNY01020.jpg",
+          "/Images/SNY01030.jpg",
+          "/Images/SNY01038.jpg",
+        ];
+        break;
+      case "21": //Gifford
+        matchedPhotos = ["/Images/SNY01031.jpg"];
+        break;
+      case "22": //Aggie Village Parking Lot
+        matchedPhotos = ["/Images/SNY01034.jpg"];
+        break;
+      case "23": //Prospect
+        matchedPhotos = ["/Images/SNY01041.jpg"];
+        break;
+      case "24": //Prospect and Center
+        matchedPhotos = ["/Images/SNY01045.jpg"];
+        break;
+      case "25": //Hilton
+        matchedPhotos = ["/Images/SNY01051.jpg", "/Images/SNY01062.jpg"];
+        break;
+      case "26": //Loaf N Jug
+        matchedPhotos = ["/Images/SNY01070.jpg"];
+        break;
+      case "27": //Prospect Station
+        matchedPhotos = ["/Images/SNY01080.jpg"];
+        break;
+      case "28": //Railroad
+        matchedPhotos = ["/Images/SNY01086.jpg", "/Images/SNY01090.jpg"];
+        break;
+      case "29": //Parking Lot Fence
+        matchedPhotos = ["/Images/SNY01097.jpg"];
+        break;
+      case "30": //Rocky Mountain Research Station
+        matchedPhotos = ["/Images/SNY01100.jpg"];
+        break;
+      case "31": //Prospect Plaza Fence
+        matchedPhotos = ["/Images/SNY01109.jpg"];
+        break;
+      case "32": //Old Town Statues
+        matchedPhotos = ["/Images/SNY01120.jpg", "/Images/SNY01122.jpg"];
+        break;
+      case "33": //Little Bird Break
+        matchedPhotos = ["/Images/SNY01127.jpg"];
+        break;
+      case "34": //Old Town Bench
+        matchedPhotos = ["/Images/SNY01133.jpg"];
+        break;
+      case "35": //Old Town Tree
+        matchedPhotos = ["/Images/SNY01137.jpg"];
+        break;
+      case "36": //City Park Bench
+        matchedPhotos = ["/Images/SNY01150.jpg"];
+        break;
+      case "37": //Statue of Liberty
+        matchedPhotos = ["/Images/SNY01161.jpg"];
+        break;
+      case "38": //City Park Playground
+        matchedPhotos = ["/Images/SNY01169.jpg", "/Images/SNY01173.jpg"];
+        break;
+      case "39": //City Park Table
+        matchedPhotos = ["/Images/SNY01179.jpg"];
+        break;
+      case "40": //City Park Rock
+        matchedPhotos = ["/Images/SNY01181.jpg", "/Images/SNY01192.jpg"];
+        break;
+      case "41": //City Park Pool
+        matchedPhotos = ["/Images/SNY01197.jpg"];
+        break;
+      case "42": //City Park Lake Rock
+        matchedPhotos = ["/Images/SNY01210.jpg"];
+        break;
+      case "43": //City Park Lake Corner
+        matchedPhotos = ["/Images/SNY01216.jpg"];
+        break;
+      case "44": //Underpass
+        matchedPhotos = [
+          "/Images/SNY01219.jpg",
+          "/Images/SNY01222.jpg",
+          "/Images/SNY01226.jpg",
+          "/Images/SNY01238.jpg",
+        ];
+        break;
+      case "45": //Hut Roof
+        matchedPhotos = ["/Images/SNY01242.jpg"];
+        break;
+      case "46": //City Park Bridge
+        matchedPhotos = ["/Images/SNY01253.jpg"];
+        break;
+      case "47": //Big Horn Landing Plaza
+        matchedPhotos = ["/Images/SNY01274.jpg"];
+        break;
+      case "48": //Big Horn Landing Bridge
+        matchedPhotos = ["/Images/SNY01278.jpg"];
+        break;
+      case "49": //Big Horn Landing Corner
+        matchedPhotos = [
+          "/Images/SNY01284.jpg",
+          "/Images/SNY01290.jpg",
+          "/Images/SNY01296.jpg",
+          "/Images/SNY01307.jpg",
+        ];
+        break;
+      case "50": //Stadium Apartments Bike Rack
+        matchedPhotos = ["/Images/SNY01321.jpg"];
+        break;
+      case "51": //Arboretum
+        matchedPhotos = ["/Images/SNY01332.jpg", "/Images/SNY01338.jpg"];
+        break;
+      case "52": //Academic Village Rock Pit
+        matchedPhotos = [
+          "/Images/SNY01341.jpg",
+          "/Images/SNY01345.jpg",
+          "/Images/SNY01349.jpg",
+        ];
+        break;
+      case "53": //IM Field Soccer Net
+        matchedPhotos = ["/Images/SNY01354.jpg"];
+        break;
+      case "54": //Front Rec Center
+        matchedPhotos = ["/Images/SNY01362.jpg", "/Images/SNY01378.jpg"];
+        break;
+      case "55": //Rec Center Rock Wall
+        matchedPhotos = ["/Images/SNY01391.jpg", "/Images/SNY01393.jpg"];
+        break;
+      case "56": //Bush Rec Center
+        matchedPhotos = ["/Images/SNY01404.jpg"];
+        break;
+      case "57": //Cone
+        matchedPhotos = ["/Images/SNY01413.jpg", "/Images/SNY01420.jpg"];
+        break;
+      case "58": //Call Box
+        matchedPhotos = ["/Images/SNY01421.jpg"];
+        break;
+      case "59": //Underground Parking
+        matchedPhotos = ["/Images/SNY01450.jpg"];
+        break;
+      case "60": //Hole in Wall
+        matchedPhotos = ["/Images/SNY01454.jpg"];
+        break;
+      case "61": //Lake and Center
+        matchedPhotos = ["/Images/SNY01501.jpg", "/Images/SNY01507.jpg"];
+        break;
+      case "62": //Lake St
+        matchedPhotos = ["/Images/SNY01589.jpg"];
+        break;
+      case "63": //Center Ave Mall Enterance
+        matchedPhotos = ["/Images/SNY01609.jpg"];
+        break;
+
+      default:
+        console.warn("No photos found for this marker:", markerId);
+    }
+
+    setSelectedFileList(matchedPhotos);
+    setShowFileList(true);
+  };
+
+  const handleFileClick = (file: string) => {
+    setSelectedIndex(photos.indexOf(file)); // Use currently selected layout
+    setShowFileList(false); // Hide the file list modal
+  };
+
+  return (
+    <div className="container py-4">
+      <h1 className="text-center mb-4">PHOTOGRAPHY GALLERY NOVEMBER 2023</h1>
+
+      <div className="text-center mb-3">
+        <select
+          className="form-select d-inline w-auto"
+          value={layout}
+          onChange={(e) => setLayout(e.target.value as "layout1" | "layout2")}
+        >
+          <option value="layout1">Original Display Layout</option>
+          <option value="layout2">Chronological Layout</option>
+        </select>
+      </div>
+
+      <div className="d-flex flex-wrap justify-content-center">
+        {photos.map((src, index) => (
+          <div key={index} className="p-1" style={{ width: "10%" }}>
+            <img
+              src={src}
+              alt={`Photo ${index + 1}`}
+              className="img-fluid shadow"
+              style={{ cursor: "pointer" }}
+              onClick={() => setSelectedIndex(index)}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Bootstrap Modal for Full-Screen Image */}
+      {selectedIndex !== null && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ backgroundColor: "rgba(0,0,0,0.8)" }}
+          onClick={() => setSelectedIndex(null)}
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content bg-transparent border-0">
+              <div className="modal-body p-0">
+                <img
+                  src={photos[selectedIndex]}
+                  alt="Selected"
+                  className="img-fluid w-100"
+                  style={{ transform: "scale(2.5)" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="my-4">
+        <div className="map-container">
+          <MapContainer
+            center={[40.57814441590173, -105.08795094576963]}
+            zoom={15}
+            style={{ height: "800px", width: "100%" }}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <CustomMarker //Parking Garage
+              position={[40.56804422949841, -105.08322173204029]}
+              markerId="1"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Center Ave Enterance to Aggie Village
+              position={[40.56823132449553, -105.084003477051]}
+              markerId="2"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Aggie Village
+              position={[40.5682514395478, -105.08515800497932]}
+              markerId="3"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Lake St Exit from Aggie Village
+              position={[40.56865776230876, -105.0858676689353]}
+              markerId="4"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Gifford Building
+              position={[40.569183334699005, -105.08569925240863]}
+              markerId="5"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Path Behind Art Building
+              position={[40.56967581684474, -105.08527313338283]}
+              markerId="6"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Yates
+              position={[40.57021396860055, -105.0837072113145]}
+              markerId="7"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Center Ave Statue
+              position={[40.571079695416664, -105.0836475208044]}
+              markerId="8"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //School of Education
+              position={[40.57129741875321, -105.08380237385815]}
+              markerId="9"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Near Eddy and the Library
+              position={[40.5724568246556, -105.08379084760045]}
+              markerId="10"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Clark
+              position={[40.572720065673096, -105.08324171142505]}
+              markerId="11"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Library Cube
+              position={[40.57323093402608, -105.08407634457897]}
+              markerId="12"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Engineering 1
+              position={[40.57546958113972, -105.08372851038192]}
+              markerId="13"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Engineering 2
+              position={[40.57548681460632, -105.08250492202527]}
+              markerId="14"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Comp Sci
+              position={[40.5741244261188, -105.08330961304434]}
+              markerId="15"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect Plaza Parking Lot
+              position={[40.568036155435045, -105.08264348670932]}
+              markerId="16"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //My Apartment
+              position={[40.56813231753728, -105.08233801933032]}
+              markerId="17"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Laundromat
+              position={[40.5674110984024, -105.08222794099555]}
+              markerId="18"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect Garbage
+              position={[40.568404079253135, -105.0825801916668]}
+              markerId="19"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect and Whitcomb
+              position={[40.56719591920452, -105.0869204431513]}
+              markerId="20"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Gifford
+              position={[40.56899270280789, -105.08664175840595]}
+              markerId="21"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Aggie Village Parking Lot
+              position={[40.56805899831978, -105.08651555351483]}
+              markerId="22"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect
+              position={[40.567088019983714, -105.08579683085928]}
+              markerId="23"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect and Center
+              position={[40.56703891622212, -105.08373844245847]}
+              markerId="24"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Hitlon
+              position={[40.566990512811394, -105.08186442385015]}
+              markerId="25"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Loaf N Jug
+              position={[40.56690995471088, -105.07742107089204]}
+              markerId="26"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect Station
+              position={[40.567895537858426, -105.07876507291829]}
+              markerId="27"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Railroad
+              position={[40.56700122288538, -105.07903801894301]}
+              markerId="28"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Parking Lot Fence
+              position={[40.5673003704986, -105.08020182059384]}
+              markerId="29"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Rocky Mountain Research Station
+              position={[40.56731948748049, -105.08115665172298]}
+              markerId="30"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Prospect Plaza Fence
+              position={[40.56725300739433, -105.08152615920984]}
+              markerId="31"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Old Town Statues
+              position={[40.58753265745119, -105.0760391387356]}
+              markerId="32"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Little Bird Break
+              position={[40.58761312172797, -105.07511728427765]}
+              markerId="33"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Old Town Bench
+              position={[40.58798882891657, -105.07475064882875]}
+              markerId="34"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Old Town Tree
+              position={[40.58760158844368, -105.07585827008481]}
+              markerId="35"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Bench
+              position={[40.58415137838148, -105.1030880867194]}
+              markerId="36"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Statue of Liberty
+              position={[40.5843338719423, -105.10337501416633]}
+              markerId="37"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Playground
+              position={[40.58458862846317, -105.10423783551491]}
+              markerId="38"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Table
+              position={[40.585097154526835, -105.10505304467704]}
+              markerId="39"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Rock
+              position={[40.58412694319558, -105.104368859097]}
+              markerId="40"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Pool
+              position={[40.58387068735184, -105.10456198939421]}
+              markerId="41"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Lake Rock
+              position={[40.58354392378194, -105.10424817467643]}
+              markerId="42"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Lake Corner
+              position={[40.58336044105558, -105.1041961754244]}
+              markerId="43"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Underpass
+              position={[40.583719093707636, -105.10551530201396]}
+              markerId="44"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Hut Roof
+              position={[40.583130233701844, -105.10602620968054]}
+              markerId="45"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //City Park Bridge
+              position={[40.58261003271772, -105.10646710964544]}
+              markerId="46"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Big Horn Landing Plaza
+              position={[40.56595058723768, -105.09311783510158]}
+              markerId="47"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Big Horn Landing Bridge
+              position={[40.56592835553612, -105.09354137053589]}
+              markerId="48"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Big Horn Landing Corner
+              position={[40.56629630996091, -105.09341474165127]}
+              markerId="49"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Stadium Apartments Bike Rack
+              position={[40.568536951257634, -105.09252710617842]}
+              markerId="50"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Arboretum
+              position={[40.56979144389916, -105.09220345404118]}
+              markerId="51"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Academic Village Rock Pit
+              position={[40.57170370115578, -105.09087932153932]}
+              markerId="52"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //IM Field Soccer Net
+              position={[40.57285062523252, -105.09109449922221]}
+              markerId="53"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Front Rec Center
+              position={[40.57462570451224, -105.08971173507068]}
+              markerId="54"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Rec Center Rock Wall
+              position={[40.57484221998137, -105.08877993036428]}
+              markerId="55"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Bush Rec Center
+              position={[40.57508404751097, -105.0885819435428]}
+              markerId="56"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Cone
+              position={[40.57262596437094, -105.08936584911945]}
+              markerId="57"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Call Box
+              position={[40.57286837614676, -105.09032249377846]}
+              markerId="58"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Underground Parking
+              position={[40.56803217823271, -105.09112704966692]}
+              markerId="59"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Hole in Wall
+              position={[40.56714898243397, -105.09212263122438]}
+              markerId="60"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Lake and Center
+              position={[40.56883859637439, -105.08264107700161]}
+              markerId="61"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Lake St
+              position={[40.568774179108544, -105.08491940691344]}
+              markerId="62"
+              onClick={handleMarkerClick}
+            />
+            <CustomMarker //Center Ave Mall Enterance
+              position={[40.568874383728904, -105.08373030339396]}
+              markerId="63"
+              onClick={handleMarkerClick}
+            />
+          </MapContainer>
+        </div>
+      </div>
+
+      {/* File List Modal */}
+      {showFileList && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ backgroundColor: "rgba(0,0,0,0.8)" }}
+          onClick={() => setShowFileList(false)}
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
+                <ul className="list-group">
+                  {selectedFileList.map((file, index) => (
+                    <li
+                      key={index}
+                      className="list-group-item"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleFileClick(file)}
+                    >
+                      {file.split("/").pop()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Gallery;
+

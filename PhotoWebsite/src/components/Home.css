@@ -1,0 +1,16 @@
+.home-button {
+  font-size: 1.25rem;
+  background-color: #00000000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 20px;
+  text-decoration: none; /* Removes underline from Link */
+  transition: color 0.3s ease; /* Smooth transition for text color */
+}
+
+.home-button:hover {
+  color: red; /* Change text color to red on hover */
+}
